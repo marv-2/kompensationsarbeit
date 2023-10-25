@@ -1,15 +1,54 @@
 
-#ifndef INC_02_RPG_TEXTBASIERT_HEADER_H
+//#ifndef INC_02_RPG_TEXTBASIERT_HEADER_H
 #define INC_02_RPG_TEXTBASIERT_HEADER_H
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 #define MAX_SIZE 255
 
-////////////// STRUCT   ////////////
+///////////// STACK   //////////////////////////////
+
+struct list_element_s *erstelle_elem(struct list_element_s *elem);
+
+struct list_header_s *befuelle(struct list_header_s *kopf);
+struct list_header_s *erstellen(struct list_header_s *kopf);
+
+void easter_egg_frage_03();
+
+
+////////////// BAUM   //////////////////////////////////
+
+typedef struct knoten_s{
+    int daten ;
+    int counter;
+    struct knoten_s *left ;         // fuer die linke Adresse
+    struct knoten_s *right;         // fuer die rechte Adresse
+}knoten_t ;
+struct knoten_s * neuer_knoten(int daten);      // easter_egg in frage 9
+void easter_egg_frage_07();
+
+/////////////   LISTE   ////////////////////////////////
+
+typedef struct list_element_s{
+    int val ;
+
+    struct list_item * naechstes_element;
+    struct list_item * vorheriges_element;
+}list_element_t;
+typedef struct list_header_s{
+    int groesse ;
+    struct list_item_s * start ;
+    struct list_item_s * end ;
+}list_header_t ;
+
+
+void easter_egg_frage_05();
+
+//////////////   FUNKTIONESPROTOTYPEN   ////////////////////
 
 typedef struct player_s{
     int ID;
@@ -18,13 +57,10 @@ typedef struct player_s{
     int HP;
 }player_t;
 
-
-
-//////////////   FUNKTIONESPROTOTYPEN   ////////////////////
-
 void start();
 void neu_anmelden();
 struct player_s *erstelle_spieler(char benutzer_name[]);
+
 
 
 void login();

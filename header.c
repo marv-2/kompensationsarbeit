@@ -1,6 +1,8 @@
 #include "header.h"
 
+// neuer Knoten wird erstellt
 
+//////////////////////////////////////////////////////
 void start(){
 
     printf("Willkommen, bitte waehle folgenden Option.\n"
@@ -37,6 +39,8 @@ void neu_anmelden(){
     strcat(file_path, benutzer_name);
     benutzer= fopen(strcat(file_path, ".txt"), "w");
 
+
+
 // fehlerabfrage
     if(benutzer == NULL) {
         printf("FEHLER");
@@ -68,23 +72,6 @@ void neu_anmelden(){
 
 
 }
-
-
-struct player_s *erstelle_spieler(char benutzer_name[]){
-    struct player_s * user_a ;
-    user_a = (struct player_s*) malloc(sizeof(struct player_s));
-    if(user_a == NULL){
-        printf("kein speicher");
-    }
-
-    strcpy(user_a->name,benutzer_name);
-    user_a->level = 1 ;
-    user_a->HP = 100 ;
-
-
-    return user_a ;
-}
-
 
 void login(){
 
@@ -140,7 +127,7 @@ void login(){
         if(file_content_int01 == 'P') {                                     // pruefen ob pointer in der Datei bei 'P' ist
             file_content_int02 = fgetc(benutzer);                       // und pruefen ob Zweite stelle in 'W'
             if (file_content_int02 == 'W') {
-                                                                            // hier wird das PW aus der Datei gespeichert
+                // hier wird das PW aus der Datei gespeichert
                 for (int i = 0; a != 10 ; ++i) {                            // die darauf folgenden buchstaben bis zum '\0' speichern
                     a = fgetc(benutzer);                                // '10' steht fuer den INTEGER-Wert des 'ENTER'
                     benutzer_PW_check[i] = a;
@@ -177,7 +164,6 @@ void login(){
 
 }
 
-
 void spielstart(struct player_s *user_a){
     printf("Du bist im spiel!");
     geschichte_01();
@@ -193,7 +179,205 @@ void spielstart(struct player_s *user_a){
     geschichte_03();
 
 }
+////////////////////////////////////////////////////
 
+struct player_s *erstelle_spieler(char benutzer_name[]){
+    struct player_s * user_a ;
+    user_a = (struct player_s*) malloc(sizeof(struct player_s));
+    if(user_a == NULL){
+        printf("kein speicher");
+    }
+
+    strcpy(user_a->name,benutzer_name);
+    user_a->level = 1 ;
+    user_a->HP = 100 ;
+
+
+    return user_a ;
+}
+
+///////////////////////   STACK   ///////////////////////////////////////////
+
+int push(int array[], int data, int i  ){
+    array[i] = data ;
+    printf("Folgende Zahl wurde Hinzugefuegt : %i\n"
+           "i ist %i\n"
+           "Die Adresse ist: %i\n"
+           "Der Weert ist: %i\n\n\n", array[i], i, &array[i], array[i]);
+
+}
+
+int pop(int array[], int data, int i  ){
+//    array[i] = data ;
+    printf("Folgende Zahl wurde entnommen : %i\n"
+           "i ist %i\n"
+           "Die Adresse ist: %i\n"
+           "Der Weert ist: %i\n\n\n", array[i], i, &array[i], array[i]);
+
+    data = array[i];
+
+}
+
+void easter_egg_frage_03(){
+    int data = 0 ;              // fuer die Zufallszahlen
+    int vergleich = 0 ;         // um die eingabe zu pruefen
+    int i = 0 ;                 // Zaehlvariable
+    int array[3] = {0} ;        // stack mit 3 positionen
+//    int *position_array = &array;   // fuer die Adresse des arrays
+
+
+    printf("Folgende Zahlen muss du in umgekehrt Reihenfolge merken !!\n");
+    srand(time(NULL));
+
+    while(i < 3 ){
+//        system("cls");          // nach 3 sek wird der Bildschirm gesaeubert
+        data = rand() % 10 + 1 ;
+        push(array,  data , i );
+        printf("%i-te Zahl ist : %i \n", i+1 , data);
+        sleep(1);
+        i++ ;
+    }
+
+i--;
+
+    while (i >= 0 ){
+
+        printf("Welche Zahl ist an Position %i ? \n", i+1 );
+//        scanf("%i", &vergleich);
+
+        vergleich = array[i] ;
+
+        if(array[i]==vergleich){
+            pop( array , data,  i  );
+        } else{
+            printf("falsch");
+            return ;
+        }
+        i-- ;
+    }
+
+
+}
+
+////////////////   LISTE   //////////////////////////////////////////////////
+
+struct list_element_s *elem_einfuegen(struct list_element_s *elem,struct list_header_s *kopf){
+    if(kopf->start == NULL && kopf->end == NULL){        // abfrage ob liste leer
+        kopf->start =kopf->end =  elem ;                // 'header' wird die Adresse vom elemen gegeben
+        elem->val = 3 ;
+        kopf->groesse = kopf->groesse + 1 ;
+        return elem;
+    }
+
+    if(kopf->start != NULL){
+        elem->vorheriges_element = kopf->end ;
+        kopf->groesse++;
+    }
+
+}
+
+struct list_element_s *befuelle_elem(struct list_element_s *elem){
+        elem->vorheriges_element = NULL ;
+        elem->naechstes_element = NULL ;
+        elem->val = 0 ;
+        return elem;
+}
+struct list_element_s *erstelle_elem(struct list_element_s *elem){
+    elem = malloc(sizeof (list_element_t ));
+    if(elem == NULL){
+        return 0 ;
+    }
+    return elem ;
+}
+
+struct list_header_s *befuelle(struct list_header_s *kopf){
+    kopf->groesse = 0 ;
+    kopf->start = NULL ;
+    kopf->end = NULL ;
+
+    return kopf ;
+}
+struct list_header_s *erstellen(struct list_header_s *kopf){
+    kopf= malloc(sizeof(list_header_t));
+    if(kopf == NULL){
+        return 0;
+    }
+    return kopf ;
+}
+
+void easter_egg_frage_05(){
+    //listen header erstellen
+    struct list_header_s *kopf;
+    kopf =  erstellen(kopf);
+    kopf =  befuelle(kopf);
+
+    struct list_element_s *elem;
+    elem = erstelle_elem(elem);
+    elem = befuelle_elem(elem);
+
+    elem_einfuegen(elem, kopf);
+
+
+}
+
+////////////////   BAUM   ///////////////////////////////////////////////////
+
+struct knoten_s * neuer_knoten(int daten){
+    knoten_t * knoten = malloc(sizeof(knoten_t));
+    if(knoten == NULL )
+    {
+        printf("fehler");
+        return NULL;
+    }
+
+    knoten->daten = daten ;
+    knoten->counter = 0 ;
+    knoten->left = NULL ;
+    knoten->right = NULL ;
+
+    return knoten;
+
+}
+
+struct knoten_s * knoten_hinzufuegen(struct knoten_s * knoten, int daten ){
+
+    if(knoten == NULL){                 // falls noch kein knoten exisitert wird einer erstellt
+        neuer_knoten(daten);
+        return neuer_knoten(daten);
+    }
+
+    if(knoten->daten < daten ){             // wenn die Uebergeben daten groesser sind nach RECHTS
+        knoten->right = neuer_knoten(daten);
+    }
+
+    if(knoten->daten > daten){
+        knoten->left = neuer_knoten(daten);
+    }
+
+}
+
+void easter_egg_frage_07(){
+    printf("Willkommen im Easter-Eg\n"
+           "Gibt eine Zahl zwischen zwischen 3 und 9 ein: ");
+    int counter = 0 ;
+    int daten = 0 ;
+    int i = 0;
+
+    scanf("%i", &counter);
+    if(counter <3 || counter > 9)
+    {
+        printf("Invalid");
+        return;
+    }
+
+    knoten_t *knoten1 = NULL ;                  // dem ersten knoten wird die Adresse NULL gegeben
+
+    while (i < counter){
+        knoten1  = knoten_hinzufuegen(knoten1, daten );
+        i++;
+    }
+
+}
 
 ////////////   Geschichte   ///////////////////////
 
@@ -493,7 +677,9 @@ void frage_03(struct player_s *user_a){
             user_a->level++;
             antwort_03();
             break;
-
+        case 666:
+            easter_egg_frage_03();
+            break;
         default:
             printf("Diese Antwort ist falsch\n"
                    "!!!!!Du verlierst 10 Lebenspunkte!!!\n");
@@ -779,7 +965,8 @@ void frage_07(struct player_s *user_a){
             user_a->level++;
             antwort_07();
             break;
-
+        case 666:
+            easter_egg_frage_07();
         default:
             printf("Diese Antwort ist falsch\n"
                    "!!!!!Du verlierst 10 Lebenspunkte!!!\n");
